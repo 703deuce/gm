@@ -12,15 +12,13 @@ VLLM_BASE_URL = f"http://127.0.0.1:{VLLM_PORT}/v1"
 
 
 def start_vllm_server():
-    # Start vllm.openai.api_server in a background process.
-    # For vllm/vllm-openai:nightly: python -m vllm.entrypoints.openai.api_server ...
+    # Per GLM-OCR docs: vllm serve zai-org/GLM-OCR --allowed-local-media-path / --port 8080
     subprocess.Popen(
         [
-            "python", "-m", "vllm.entrypoints.openai.api_server",
-            "--model", VLLM_MODEL,
+            "vllm", "serve", VLLM_MODEL,
+            "--allowed-local-media-path", "/",
             "--port", str(VLLM_PORT),
             "--host", "0.0.0.0",
-            "--allowed-local-media-path", "/",
         ],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.PIPE,
