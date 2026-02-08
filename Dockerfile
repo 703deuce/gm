@@ -13,7 +13,7 @@ RUN apt-get update \
         libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install with the Python we run: ensure pip then install so runpod is on sys.path
+# Install with the Python we will use at runtime (same interpreter = runpod on sys.path)
 COPY requirements-runpod.txt ./
 RUN /usr/bin/python3 -m ensurepip --default-pip 2>/dev/null || true \
     && /usr/bin/python3 -m pip install --no-cache-dir -r requirements-runpod.txt \
@@ -23,6 +23,6 @@ RUN /usr/bin/python3 -m ensurepip --default-pip 2>/dev/null || true \
 
 COPY handler.py ./
 
-# Override image entrypoint: run handler with same Python we installed into
+# Force rebuild: install and runtime use same interpreter
 ENTRYPOINT ["/usr/bin/python3"]
 CMD ["-u", "handler.py"]
