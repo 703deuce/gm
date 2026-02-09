@@ -30,7 +30,7 @@ except ImportError:
 
 # Defaults (override with env or -e / -k)
 RUNPOD_API_KEY = os.getenv("RUNPOD_API_KEY", "rpa_5B3UJFTJCQW65L0IZPHBOUC41742AESP9B378LSQrf9q5a")
-RUNPOD_ENDPOINT_ID = os.getenv("RUNPOD_ENDPOINT_ID", "jsg755sv73y37a")
+RUNPOD_ENDPOINT_ID = os.getenv("RUNPOD_ENDPOINT_ID", "82dnm525p53zy4")
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_IMAGE = SCRIPT_DIR / "test.jpg"

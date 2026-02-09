@@ -1,6 +1,9 @@
 # GLM-OCR RunPod Serverless Worker using Transformers (no vLLM)
 FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
 
+# Bump to force pip layer rebuild when RunPod reuses cache (or pass --build-arg CACHE_BUSTER=3)
+ARG CACHE_BUSTER=2
+
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PIP_NO_CACHE_DIR=1
 
@@ -16,9 +19,11 @@ RUN apt-get update \
         libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Bump .build-rev (e.g. to 3) and push to force pip layer rebuild when RunPod caches
-COPY .build-rev requirements-runpod.txt ./
-RUN python3 -m pip install --no-cache-dir -r requirements-runpod.txt \
+# Python deps (layer rebuilds when CACHE_BUSTER changes)
+ARG CACHE_BUSTER
+COPY requirements-runpod.txt ./
+RUN echo "Cache buster: $CACHE_BUSTER" \
+    && python3 -m pip install --no-cache-dir -r requirements-runpod.txt \
     && find /usr/local/lib /usr/lib -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
     && find /usr/local/lib /usr/lib -name "*.pyc" -delete 2>/dev/null || true \
     && rm -rf /root/.cache /tmp/* 2>/dev/null || true
