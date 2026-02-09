@@ -1,7 +1,8 @@
 runpod
-fastapi
-uvicorn[standard]
-# HF + vLLM stack
+# Core HF stack for GLM-OCR (no vLLM)
+torch==2.3.0
+torchvision==0.18.0
 transformers @ git+https://github.com/huggingface/transformers.git
-vllm==0.6.2
 accelerate
+Pillow
+requests
