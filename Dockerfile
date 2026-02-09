@@ -16,10 +16,9 @@ RUN apt-get update \
         libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Python deps (bump CACHEBUST to force pip layer: --build-arg CACHEBUST=2)
-ARG CACHEBUST=1
-COPY requirements-runpod.txt ./
-RUN echo "Cache bust: ${CACHEBUST}" && python3 -m pip install --no-cache-dir -r requirements-runpod.txt \
+# Bump .build-rev (e.g. to 3) and push to force pip layer rebuild when RunPod caches
+COPY .build-rev requirements-runpod.txt ./
+RUN python3 -m pip install --no-cache-dir -r requirements-runpod.txt \
     && find /usr/local/lib /usr/lib -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
     && find /usr/local/lib /usr/lib -name "*.pyc" -delete 2>/dev/null || true \
     && rm -rf /root/.cache /tmp/* 2>/dev/null || true
